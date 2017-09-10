@@ -16,11 +16,15 @@ h1 {
 }
 
 
-h1, h2, h3 {
-font-family: 'Roboto Slab', serif;	
+h2, 
+h3,
+p {
+	font-family: 'Roboto Slab', serif;	
 }
 
-
+.rank-status {
+	font-family: 'Open Sans', sans-serif;
+}
 
 /*header styles*/
 
@@ -42,8 +46,8 @@ header {
 	border: 2px solid #D1D3D4;
 }
 
-.idea-input {
-	height: 78px;
+.search-input {
+	margin-top: 15px;
 }
 
 input::placeholder {
@@ -51,6 +55,9 @@ font-size: 13pt;
 color: #CFD8DC;
 }
 
+.body-input {
+	height: 78px;
+}
 
 .button {
 	background: #00A79D;
@@ -79,26 +86,17 @@ color: #CFD8DC;
 	height: 25px;
 }
 
-.right {
-	float: right;
-}
-
-
 h2 {
 	
 	color: #6D6E71;
 	font-size: 18px;
 }
 
-.idea-article {
+.card {
 	width: 85%;
 	margin: 20px auto;
 	padding-top: 5px;
 	text-align: left;
-}
-
-#search-input {
-	margin-top: 15px;
 }
 
 .icon-buttons {
@@ -118,6 +116,7 @@ h2 {
 }
 
 .delete-button {
+	float: right;
 	margin-top: -20px;
 	margin-right: 20px;
 }
@@ -138,14 +137,14 @@ h2 {
 	background: url('../images/downvote-hover.svg');
 }
 
-.quality-rank {
+.rank {
 	display: flex;
 	flex-direction: row;
 	color: #6D6E71;
 	font-size: 10pt;
 }
 
-.idea-paragraph {
+.card-body {
 	color: #939598;
 	font-size: 12pt;
 	margin: 10px auto 20px auto;
@@ -163,11 +162,6 @@ hr {
 
 @media only screen and (min-width: 800px){
 
-
-main.container {
-	text-align: center;
-}
-
 h1 {
 	font-size: 27pt;
 	margin-bottom: 20px;
@@ -181,8 +175,8 @@ h1 {
 	height: 30px;
 }
 
-.idea-input {
-	height: 30px;
+.search-input {
+	margin-top: 15px;
 }
 
 .button {
@@ -191,7 +185,7 @@ h1 {
 	width: 50%;
 }
 
-.idea-article {
+.card {
 	width: 50%;
 	margin-left: auto;
 	margin-right: auto;
