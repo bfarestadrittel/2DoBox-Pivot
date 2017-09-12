@@ -28,16 +28,23 @@ function resetFields() {
 	$('.body-input').val("");
 };
 
-//call addIdea function on click of submit button
-$('.submit-button').on('click', addIdea);
+//call addCard function on click of submit button
+$('.submit-button').on('click', addCard);
+
+function enterPress(e) {
+	console.log('morepie');
+	if (e.keyCode === 13 && ($('.title-input').val() && $('.body-input').val())){
+		addCard(e)
+	}
+};
 
 //on keyup of title and body inputs
-$('.title-input', '.body-input').on('keyup', function (e) {
+$('.title-input', '.body-input').on('keyup', enterPress); 
 	//if enter button (keyCode13) is pressed and both inputs have a value
-	if (e.keyCode === 13 && ($('.title-input').val() && $('.body-input').val())){
-		addIdea(e)
-	}
-});
+// 	if (e.keyCode === 13 && ($('.title-input').val() && $('.body-input').val())){
+// 		addCard(e)
+// 	}
+// });
 
 
 //constructor function 
@@ -54,13 +61,13 @@ function Idea (title, body) {
 // };
 
 //taking input values, creating idea object, prepending, sending storage
-function addIdea (e) {
+function addCard (e) {
 	e.preventDefault();
 	var title = $('.title-input').val();
 	var body = $('.body-input').val();
 	var anotherIdea = new Idea(title, body);
 	prependIdea(anotherIdea);
-	storeIdea(anotherIdea);
+	storeCard(anotherIdea);
 	$('.title-input').focus();
 }
 
@@ -85,7 +92,7 @@ function prependIdea (idea) {
 }
 
 function deleteCard(){
-	console.log(this);
+	// console.log(this);
 	$(this).closest('.card').remove();
 	localStorage.removeItem(getId($(this)));
 }
@@ -99,7 +106,7 @@ function getId ($element) {
 };
 
 //sending to localStorage 
-function storeIdea (card) {
+function storeCard (card) {
 	localStorage.setItem(card.id, JSON.stringify(card));
 };
 
@@ -112,44 +119,18 @@ $('.card-list').on('click', '.upvote-button-div, .downvote-button-div', function
 		var statusIndex = statusArray.indexOf($checkStatus.text());
 		var incriment = $(this).hasClass('upvote-button-div') ? 1:-1;
 		var newStatus = statusArray[statusIndex + incriment];
+		var updateCard = JSON.parse(localStorage.getItem(getId($(this))))
 			$checkStatus.text(newStatus);
+			updateCard.status = newStatus;
+		localStorage.setItem(getId($(this)), JSON.stringify(updateCard));
 		});
-	
-		//e.target closest to rankdiv, grab the descendents of 
-	 	// var checkStatus = $(this).closest('.rank').find('.rank-status').text(); 
-	 	//  var uniqueCard = JSON.parse(localStorage.getItem(getId($(this))));
-	 	// if (checkStatus === 'swill') {
-	  //    	$(this).closest('.rank').find('.rank-status').text('plausible');
-	  //    	uniqueCard.status = 'plausible';
-			// localStorage.setItem(getId($(this)), JSON.stringify(uniqueCard));
-   //   	} else {
-   //   		$(this).closest('.rank').find('.rank-status').text('genius');
-   //   		uniqueCard.status = 'genius';
-   //   		localStorage.setItem(getId($(this)), JSON.stringify(uniqueCard));
-   //   	}
-	
-
-// same as upvote but for downvoting
-// $('.card-list').on('click', '.downvote-button-div', function() {
-//   	var checkStatus = $(this).closest('.rank').find('.rank-status').text();
-// 	var uniqueCard = JSON.parse(localStorage.getItem(getId($(this))));
-//   if (checkStatus === 'genius') {
-// 		$(this).closest('.rank').find('.rank-status').text('plausible');
-// 		uniqueCard.status = 'plausible';
-// 		localStorage.setItem(id, JSON.stringify(uniqueCard));
-//   } else {
-//   		$(this).closest('.rank').find('.rank-status').text('swill');
-//   		uniqueCard.status = 'swill';
-// 		localStorage.setItem(id, JSON.stringify(uniqueCard));
-//   }
-// });
 
 //on keyup of body content(after edit) sent to localStorage 
 $('.card-list').on('keyup', '.card-body', editBody);
 //also makes enterkey focus out
 function editBody(e) {
-var id = ($(this).closest('.card').attr('id'));
-var uniqueCard = JSON.parse(localStorage.getItem(id));
+var id = ($(this).closest('.card').attr('id')); //getIdea
+var uniqueCard = JSON.parse(localStorage.getItem(id)); 
 if (e.keyCode === 13) {
 	e.preventDefault();
 	this.blur();
