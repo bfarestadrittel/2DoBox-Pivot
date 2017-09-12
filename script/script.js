@@ -4,9 +4,7 @@ $('.title-input').keyup(enabledBtn);
 
 
 // on page load retrieve local storage
-$(document).ready(function() {
-	retrieveCard();
-});
+$(document).ready(retrieveCard);
 
 //retrieve parsed local storage 
 function retrieveCard () {
@@ -46,7 +44,7 @@ $('.title-input', '.body-input').on('keyup', function (e) {
 function Idea (title, body) {
 	this.title = title;
 	this.body = body; 
-	this.status = 'swill'; 
+	this.status = 'normal'; 
 	this.id = Date.now();
 };
 
@@ -86,11 +84,15 @@ function prependIdea (idea) {
 	enabledBtn();
 }
 
-//eventlistener for delete button and function to remove from section and localStorage
-$('.card-list').on('click', '.delete-button-div', function() {
+function deleteCard(){
+	console.log(this);
 	$(this).closest('.card').remove();
 	localStorage.removeItem(getId($(this)));
-});
+}
+
+
+$('.card-list').on('click', '.delete-button-div', deleteCard);
+
 
 function getId ($element) {
 	return $element.closest('.card').attr('id');
@@ -101,44 +103,46 @@ function storeIdea (card) {
 	localStorage.setItem(card.id, JSON.stringify(card));
 };
 
-//event listener on section for upvote - function if quality is swill - change to plausible, else change to genius
-//and send to localStorage with new quality string
-//if e.target is upvote...
-//if e.target is downvote...
-$('.card-list').on('click', '.upvote-button-div', function() {
-		// console.log(this) = e.target
+
+
+
+$('.card-list').on('click', '.upvote-button-div, .downvote-button-div', function(e) {
+		var statusArray = ['none', 'low', 'normal', 'high', 'critical'];
+		var $checkStatus = $(this).closest('.rank').find('.rank-status');
+		var statusIndex = statusArray.indexOf($checkStatus.text());
+		var incriment = $(this).hasClass('upvote-button-div') ? 1:-1;
+		var newStatus = statusArray[statusIndex + incriment];
+			$checkStatus.text(newStatus);
+		});
+	
 		//e.target closest to rankdiv, grab the descendents of 
-	 	var checkStatus = $(this).closest('.rank').find('.rank-status').text(); //grab the quality content span (swill)
-	 	// var id = ($(this).closest('.card').attr('id')); //getId()
-	 	// var uniqueCard = JSON.parse(localStorage.getItem(id)); 
-	 	 var uniqueCard = JSON.parse(localStorage.getItem(getId($(this))));
-	 	if (checkStatus === 'swill') {
-	 		// checkStatus = 'plausible'
-	     	$(this).closest('.rank').find('.rank-status').text('plausible');
-	     	uniqueCard.status = 'plausible';
-			localStorage.setItem(getId($(this)), JSON.stringify(uniqueCard));
-     	} else {
-     		// checkStatus = 'genius';
-     		$(this).closest('.rank').find('.rank-status').text('genius');
-     		uniqueCard.status = 'genius';
-     		localStorage.setItem(getId($(this)), JSON.stringify(uniqueCard));
-     	}
-	});
+	 	// var checkStatus = $(this).closest('.rank').find('.rank-status').text(); 
+	 	//  var uniqueCard = JSON.parse(localStorage.getItem(getId($(this))));
+	 	// if (checkStatus === 'swill') {
+	  //    	$(this).closest('.rank').find('.rank-status').text('plausible');
+	  //    	uniqueCard.status = 'plausible';
+			// localStorage.setItem(getId($(this)), JSON.stringify(uniqueCard));
+   //   	} else {
+   //   		$(this).closest('.rank').find('.rank-status').text('genius');
+   //   		uniqueCard.status = 'genius';
+   //   		localStorage.setItem(getId($(this)), JSON.stringify(uniqueCard));
+   //   	}
+	
 
 // same as upvote but for downvoting
-$('.card-list').on('click', '.downvote-button-div', function() {
-  	var checkStatus = $(this).closest('.rank').find('.rank-status').text();
-	var uniqueCard = JSON.parse(localStorage.getItem(getId($(this))));
-  if (checkStatus === 'genius') {
-		$(this).closest('.rank').find('.rank-status').text('plausible');
-		uniqueCard.status = 'plausible';
-		localStorage.setItem(id, JSON.stringify(uniqueCard));
-  } else {
-  		$(this).closest('.rank').find('.rank-status').text('swill');
-  		uniqueCard.status = 'swill';
-		localStorage.setItem(id, JSON.stringify(uniqueCard));
-  }
-});
+// $('.card-list').on('click', '.downvote-button-div', function() {
+//   	var checkStatus = $(this).closest('.rank').find('.rank-status').text();
+// 	var uniqueCard = JSON.parse(localStorage.getItem(getId($(this))));
+//   if (checkStatus === 'genius') {
+// 		$(this).closest('.rank').find('.rank-status').text('plausible');
+// 		uniqueCard.status = 'plausible';
+// 		localStorage.setItem(id, JSON.stringify(uniqueCard));
+//   } else {
+//   		$(this).closest('.rank').find('.rank-status').text('swill');
+//   		uniqueCard.status = 'swill';
+// 		localStorage.setItem(id, JSON.stringify(uniqueCard));
+//   }
+// });
 
 //on keyup of body content(after edit) sent to localStorage 
 $('.card-list').on('keyup', '.card-body', editBody);
