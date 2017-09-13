@@ -15,7 +15,6 @@ h1 {
 	padding-top: 10px;
 }
 
-
 h2, 
 h3,
 p {
@@ -38,12 +37,11 @@ header {
 }
 
 .input {
-	width: 85%;
-	margin: 10px 10px 5px 10px;
-	height: 33px;
-	padding: 10px 5px;
-	/*padding-right: 10px auto;*/
 	border: 2px solid #D1D3D4;
+	height: 33px;
+	margin: 10px 10px 5px 10px;
+	padding: 10px 5px;
+	width: 85%;
 }
 
 .search-input {
@@ -51,8 +49,8 @@ header {
 }
 
 input::placeholder {
-font-size: 13pt;
 color: #CFD8DC;
+font-size: 13pt;
 }
 
 .body-input {
@@ -61,13 +59,12 @@ color: #CFD8DC;
 
 .button {
 	background: #00A79D;
-	color: #FFFFFF;	
 	border: none;
-	width: 85%;
-	margin: 10px 10px 20px 10px;
-	height: 35px;
+	color: #FFFFFF;	
 	font-size: 18px;
-
+	height: 35px;
+	margin: 10px 10px 20px 10px;
+	width: 85%;
 }
 
 .button:hover {
@@ -77,37 +74,34 @@ color: #CFD8DC;
 /*main container styles*/
 
 .container {
-	text-align: center;
 	margin-top: 5px;
+	text-align: center;
 }
 
 .icon {
-	width: 25px;
 	height: 25px;
+	width: 25px;
 }
 
 h2 {
-	
 	color: #6D6E71;
 	font-size: 18px;
 }
 
 .card {
-	width: 85%;
 	margin: 20px auto;
 	padding-top: 5px;
 	text-align: left;
+	width: 85%;
 }
 
 .icon-buttons {
 	height: 25px;
-	width: 25px;
-	/*display: inline;*/
 	margin-right: 15px;
+	width: 25px;
 }
 
 .delete-button-div {
-	
 	background:url('../images/delete.svg');
 }
 
@@ -138,17 +132,16 @@ h2 {
 }
 
 .rank {
+	color: #6D6E71;
 	display: flex;
 	flex-direction: row;
-	color: #6D6E71;
 	font-size: 10pt;
 }
 
 .card-body {
 	color: #939598;
 	font-size: 12pt;
-	margin: 10px auto 20px auto;
-	
+	margin: 10px auto 20px auto;	
 }
 
 hr {
@@ -160,6 +153,7 @@ hr {
 	display: none;
 }
 
+/*breakpoints*/
 @media only screen and (min-width: 800px){
 
 h1 {
@@ -170,9 +164,9 @@ h1 {
 
 .input {
 	font-size: 18px;
+	height: 30px;
 	margin: 5px 15px;
 	width: 50%;
-	height: 30px;
 }
 
 .search-input {
@@ -186,9 +180,9 @@ h1 {
 }
 
 .card {
-	width: 50%;
 	margin-left: auto;
 	margin-right: auto;
+	width: 50%;
 }
 
 
