@@ -20,24 +20,77 @@ $('.card-list').on('keyup', '.card-title', editTitle);
 //on keyup of body content(after edit) sent to localStorage 
 $('.card-list').on('keyup', '.card-body', editBody);
 //event listener for keyup on search input
-$('.search-input').on('keyup', realtimeSearch)
+$('.search-input').on('keyup', realtimeSearch);
 //event listener for show completed button
-$('.show-completed').on('click', showCompletedTasks)
+$('.show-completed').on('click', showCompletedTasks);
+//status filter buttons event listeners
+$('.none-button').on('click', showNone);
+$('.low-button').on('click', showLow);
+$('.normal-button').on('click', showNormal);
+$('.high-button').on('click', showHigh);
+$('.critical-button').on('click', showCritical);
 
-
-function completeTask() {
-	var updateCard = JSON.parse(localStorage.getItem(getId($(this))));
-	updateCard.completed = !updateCard.completed;
-	$(this).siblings().toggleClass('strike-through');
-	storeCard(updateCard);
+function showNone() {
+	var updateCard = [];
+	Object.keys(localStorage).forEach(function(key){
+		updateCard.push(JSON.parse(localStorage.getItem(key)))
+	})
+	var filteredCards = updateCard.filter(function(card){
+		return card.status === 'none'
+	})
+	showFiltered(filteredCards)
 };
 
-function showCompletedTasks() {
-	var foundCard = $('.card-list').find('.card-display-none');
-	if (foundCard) {
-		foundCard.removeClass('card-display-none');
-		$('.card-list').prepend(foundCard);
-	}
+function showLow() {
+	var updateCard = [];
+	Object.keys(localStorage).forEach(function(key){
+		updateCard.push(JSON.parse(localStorage.getItem(key)))
+	})
+	var filteredCards = updateCard.filter(function(card){
+		return card.status === 'low'
+	})
+	showFiltered(filteredCards)
+};
+
+function showNormal() {
+	var updateCard = [];
+	Object.keys(localStorage).forEach(function(key){
+		updateCard.push(JSON.parse(localStorage.getItem(key)))
+	})
+	var filteredCards = updateCard.filter(function(card){
+		return card.status === 'normal'
+	})
+	showFiltered(filteredCards)
+};
+
+function showHigh() {
+	var updateCard = [];
+	Object.keys(localStorage).forEach(function(key){
+		updateCard.push(JSON.parse(localStorage.getItem(key)))
+	})
+	var filteredCards = updateCard.filter(function(card){
+		return card.status === 'high'
+	})
+	showFiltered(filteredCards)
+};
+
+function showCritical() {
+	var updateCard = [];
+	Object.keys(localStorage).forEach(function(key){
+		updateCard.push(JSON.parse(localStorage.getItem(key)))
+	})
+	var filteredCards = updateCard.filter(function(card){
+		return card.status === 'critical'
+	})
+	showFiltered(filteredCards)
+};
+
+function showFiltered(array) {
+$('.card-list').empty();
+	array.forEach(function(card){
+$('.card-list').append(prependCard(card));
+		
+	})
 };
 
 //constructor function 
@@ -192,6 +245,20 @@ function doYouMatch(searchTerm, index) {
 	}
 };
 
+function completeTask() {
+	var updateCard = JSON.parse(localStorage.getItem(getId($(this))));
+	updateCard.completed = !updateCard.completed;
+	$(this).siblings().toggleClass('strike-through');
+	storeCard(updateCard);
+};
+
+function showCompletedTasks() {
+	var foundCard = $('.card-list').find('.card-display-none');
+	if (foundCard) {
+		foundCard.removeClass('card-display-none');
+		$('.card-list').prepend(foundCard);
+	}
+};
 
 
 
