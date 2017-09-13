@@ -1,6 +1,6 @@
 
 *, *:before, *:after {
-  box-sizing: border-box;
+ 	box-sizing: border-box;
 }
 
 body {
@@ -9,8 +9,8 @@ body {
 }
 
 h1 {
-	font-family: 'Roboto Slab', serif;
 	color: #6D6E71;
+	font-family: 'Roboto Slab', serif;
 	font-size: 22pt;
 	padding-top: 10px;
 }
@@ -49,8 +49,8 @@ header {
 }
 
 input::placeholder {
-color: #CFD8DC;
-font-size: 13pt;
+	color: #CFD8DC;
+	font-size: 13pt;
 }
 
 .body-input {
@@ -138,10 +138,16 @@ h2 {
 	font-size: 10pt;
 }
 
+
 .card-body {
 	color: #939598;
 	font-size: 12pt;
 	margin: 10px auto 20px auto;	
+}
+
+.strike-through {
+	text-decoration: line-through red;
+	text-decoration-style: wavy; 
 }
 
 hr {
