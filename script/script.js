@@ -7,11 +7,12 @@ $('.title-input').keyup(enabledBtn);
 //call addCard function on click of submit button
 $('.submit-button').on('click', addCard);
 //on keyup of title and body inputs
-$('.title-input', '.body-input').on('keyup', enterPress); //not calling function
+$('.title-input').on('keyup', enterPress); 
+$('.body-input').on('keyup', enterPress);
 //delete card listeners
 $('.card-list').on('click', '.delete-button-div', deleteCard);
 //space for upvote downvote listener
-
+$('.card-list').on('click', '.upvote-button-div, .downvote-button-div', statusChange);
 //on keyup of title content
 $('.card-list').on('keyup', '.card-title', editTitle);
 //on keyup of body content(after edit) sent to localStorage 
@@ -21,7 +22,7 @@ $('.search-input').on('keyup', realtimeSearch)
 
 
 //constructor function 
-function Idea (title, body) {
+function Idea(title, body) {
 	this.title = title;
 	this.body = body; 
 	this.status = 'normal'; 
@@ -53,13 +54,15 @@ function resetFields() {
 
 //add card when enter button pressed/////////////////////////////////////////NOT WORKING
 function enterPress(e) {
+	// console.log(e)
 	if (e.keyCode === 13 && ($('.title-input').val() && $('.body-input').val())){
+		// e.preventDefault();
 		addCard(e)
 	}
 };
 
 //taking input values, creating idea object, prepending, sending storage
-function addCard (e) {
+function addCard(e) {
 	e.preventDefault();
 	var title = $('.title-input').val();
 	var body = $('.body-input').val();
@@ -70,7 +73,7 @@ function addCard (e) {
 }
 
 //prepending created ideacards, using new stored values, clearing input fields
-function prependIdea (idea) {
+function prependIdea(idea) {
 	$('.card-list').prepend(
 		`<article id=${idea.id} class="card">
 		<h2 class="card-title" contenteditable="true">${idea.title}</h2> 
@@ -82,7 +85,9 @@ function prependIdea (idea) {
 		</div>
 		<div class="downvote-button-div icon-buttons downvote-button"> 
 		</div>
-		<p> importance: <span class="rank-status">${idea.status}</span> </p> </div>
+		<p> importance: <span class="rank-status">${idea.status}</span> </p> 
+		<button class="completed">Task Complete</button>
+		</div>
 		<hr /> 
 		</article>`)
 	resetFields();
@@ -90,36 +95,37 @@ function prependIdea (idea) {
 };
 
 //returns the card ID
-function getId ($element) {
+function getId($element) {
 	return $element.closest('.card').attr('id');
 };
 
 //sending to localStorage 
-function storeCard (card) {
+function storeCard(card) {
 	localStorage.setItem(card.id, JSON.stringify(card));
 };
 
 //deletes card
-function deleteCard(){
+function deleteCard() {
 	$(this).closest('.card').remove();
 	localStorage.removeItem(getId($(this)));
 };
 
 //update status////////////////////////////////////////////////////////////////////REMOVE ANON FUNCTION
-$('.card-list').on('click', '.upvote-button-div, .downvote-button-div', function(e) {
+
+function statusChange() {
 		var statusArray = ['none', 'low', 'normal', 'high', 'critical'];
 		var $checkStatus = $(this).closest('.rank').find('.rank-status');
 		var statusIndex = statusArray.indexOf($checkStatus.text());
-		var incriment = $(this).hasClass('upvote-button-div') ? 1:-1;
-		var newStatus = statusArray[statusIndex + incriment];
+		var increment = $(this).hasClass('upvote-button-div') ? 1:-1;
+		var newStatus = statusArray[statusIndex + increment];
 		var updateCard = JSON.parse(localStorage.getItem(getId($(this))));
 		$checkStatus.text(newStatus);
 		updateCard.status = newStatus;
 		storeCard(updateCard)	
-});
+};
 
 //edit title text and save on enter/clickout
-function editTitle (e){
+function editTitle(e) {
 	var updateCard = JSON.parse(localStorage.getItem(getId($(this)))); 
 	if (e.keyCode === 13) {
 		e.preventDefault();
@@ -153,7 +159,7 @@ function realtimeSearch() {
 };
 
 //checking the search term in title and body
-function doYouMatch (searchTerm, index) {
+function doYouMatch(searchTerm, index) {
 	var title = $($('.card-title')[index]).html();
 	var upperCaseTitle = title.toUpperCase();
 	var body = $($('.card-body')[index]).html();
