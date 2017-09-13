@@ -21,6 +21,8 @@ $('.card-list').on('keyup', '.card-title', editTitle);
 $('.card-list').on('keyup', '.card-body', editBody);
 //event listener for keyup on search input
 $('.search-input').on('keyup', realtimeSearch)
+//event listener for show completed button
+$('.show-completed').on('click', showCompletedTasks)
 
 
 function completeTask() {
@@ -28,8 +30,15 @@ function completeTask() {
 	updateCard.completed = !updateCard.completed;
 	$(this).siblings().toggleClass('strike-through');
 	storeCard(updateCard);
-}
+};
 
+function showCompletedTasks() {
+	var foundCard = $('.card-list').find('.card-display-none');
+	if (foundCard) {
+		foundCard.removeClass('card-display-none');
+		$('.card-list').prepend(foundCard);
+	}
+};
 
 //constructor function 
 function Card(title, body) {
