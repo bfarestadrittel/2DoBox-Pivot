@@ -82,7 +82,7 @@ function prependIdea (idea) {
 		</div>
 		<div class="downvote-button-div icon-buttons downvote-button"> 
 		</div>
-		<p> quality: <span class="rank-status">${idea.status}</span> </p> </div>
+		<p> importance: <span class="rank-status">${idea.status}</span> </p> </div>
 		<hr /> 
 		</article>`)
 	resetFields();
