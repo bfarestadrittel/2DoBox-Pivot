@@ -13,6 +13,8 @@ $('.body-input').on('keyup', enterPress);
 $('.card-list').on('click', '.delete-button-div', deleteCard);
 //space for upvote downvote listener
 $('.card-list').on('click', '.upvote-button-div, .downvote-button-div', statusChange);
+//task complete button
+$('.card-list').on('click', '.completed', completeTask)
 //on keyup of title content
 $('.card-list').on('keyup', '.card-title', editTitle);
 //on keyup of body content(after edit) sent to localStorage 
@@ -21,19 +23,28 @@ $('.card-list').on('keyup', '.card-body', editBody);
 $('.search-input').on('keyup', realtimeSearch)
 
 
+function completeTask() {
+	var updateCard = JSON.parse(localStorage.getItem(getId($(this))));
+	updateCard.completed = !updateCard.completed;
+	$(this).siblings().toggleClass('strike-through');
+	storeCard(updateCard);
+}
+
+
 //constructor function 
-function Idea(title, body) {
+function Card(title, body) {
 	this.title = title;
 	this.body = body; 
 	this.status = 'normal'; 
 	this.id = Date.now();
+	this.completed = false;
 };
 
 
 //retrieve parsed local storage 
-function retrieveCard () {
+function retrieveCard() {
 	Object.keys(localStorage).forEach(function(key){
-		prependIdea(JSON.parse(localStorage[key]))
+		prependCard(JSON.parse(localStorage[key]))
 	})
 };
 
@@ -66,30 +77,34 @@ function addCard(e) {
 	e.preventDefault();
 	var title = $('.title-input').val();
 	var body = $('.body-input').val();
-	var anotherIdea = new Idea(title, body);
-	prependIdea(anotherIdea);
-	storeCard(anotherIdea);
+	var anotherCard = new Card(title, body);
+	prependCard(anotherCard);
+	storeCard(anotherCard);
 	$('.title-input').focus();
 }
 
 //prepending created ideacards, using new stored values, clearing input fields
-function prependIdea(idea) {
+function prependCard(card) {
 	$('.card-list').prepend(
-		`<article id=${idea.id} class="card">
-		<h2 class="card-title" contenteditable="true">${idea.title}</h2> 
+		`<article id=${card.id} class="card">
+		<h2 class="card-title" contenteditable="true">${card.title}</h2> 
 		<div class="delete-button-div icon-buttons delete-button">
 		</div>
-		<p contenteditable="true" class="card-body">${idea.body}</p>
+		<p contenteditable="true" class="card-body">${card.body}</p>
 		<div class="rank"> 
 		<div class="upvote-button-div icon-buttons upvote-button">
 		</div>
 		<div class="downvote-button-div icon-buttons downvote-button"> 
 		</div>
-		<p> importance: <span class="rank-status">${idea.status}</span> </p> 
-		<button class="completed">Task Complete</button>
+		<p> importance: <span class="rank-status">${card.status}</span> </p> 
 		</div>
+		<button class="completed">Task Complete</button>
 		<hr /> 
 		</article>`)
+	if (card.completed) {
+		$(`#${card.id}`).children().addClass('strike-through');
+		$(`#${card.id}`).addClass('card-display-none');
+	};
 	resetFields();
 	enabledBtn();
 };
@@ -110,8 +125,7 @@ function deleteCard() {
 	localStorage.removeItem(getId($(this)));
 };
 
-//update status////////////////////////////////////////////////////////////////////REMOVE ANON FUNCTION
-
+//changes importance status
 function statusChange() {
 		var statusArray = ['none', 'low', 'normal', 'high', 'critical'];
 		var $checkStatus = $(this).closest('.rank').find('.rank-status');
