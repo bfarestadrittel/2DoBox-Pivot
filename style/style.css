@@ -25,6 +25,10 @@ p {
 	font-family: 'Open Sans', sans-serif;
 }
 
+.display-count {
+	height: 10px;
+}
+
 /*header styles*/
 
 header {

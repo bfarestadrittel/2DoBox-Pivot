@@ -1,9 +1,12 @@
 // on page load retrieve local storage
 $(document).ready(retrieveCard);
 
-//listeners for enabling save button
+
+//listeners for enabling save button and character count
 $('.body-input').keyup(enabledBtn);
 $('.title-input').keyup(enabledBtn);
+$('.body-input').keydown(updateCount);
+$('.body-input').keyup(updateCount);
 //call addCard function on click of submit button
 $('.submit-button').on('click', addCard);
 //on keyup of title and body inputs
@@ -30,68 +33,21 @@ $('.normal-button').on('click', showNormal);
 $('.high-button').on('click', showHigh);
 $('.critical-button').on('click', showCritical);
 
-function showNone() {
-	var updateCard = [];
-	Object.keys(localStorage).forEach(function(key){
-		updateCard.push(JSON.parse(localStorage.getItem(key)))
-	})
-	var filteredCards = updateCard.filter(function(card){
-		return card.status === 'none'
-	})
-	showFiltered(filteredCards)
-};
+//if at the top it stops character count
+// $(document).ready(showLimit(2));
 
-function showLow() {
-	var updateCard = [];
-	Object.keys(localStorage).forEach(function(key){
-		updateCard.push(JSON.parse(localStorage.getItem(key)))
-	})
-	var filteredCards = updateCard.filter(function(card){
-		return card.status === 'low'
-	})
-	showFiltered(filteredCards)
-};
-
-function showNormal() {
-	var updateCard = [];
-	Object.keys(localStorage).forEach(function(key){
-		updateCard.push(JSON.parse(localStorage.getItem(key)))
-	})
-	var filteredCards = updateCard.filter(function(card){
-		return card.status === 'normal'
-	})
-	showFiltered(filteredCards)
-};
-
-function showHigh() {
-	var updateCard = [];
-	Object.keys(localStorage).forEach(function(key){
-		updateCard.push(JSON.parse(localStorage.getItem(key)))
-	})
-	var filteredCards = updateCard.filter(function(card){
-		return card.status === 'high'
-	})
-	showFiltered(filteredCards)
-};
-
-function showCritical() {
-	var updateCard = [];
-	Object.keys(localStorage).forEach(function(key){
-		updateCard.push(JSON.parse(localStorage.getItem(key)))
-	})
-	var filteredCards = updateCard.filter(function(card){
-		return card.status === 'critical'
-	})
-	showFiltered(filteredCards)
-};
-
-function showFiltered(array) {
-$('.card-list').empty();
-	array.forEach(function(card){
-$('.card-list').append(prependCard(card));
-		
-	})
-};
+// function showLimit(n) {
+// 	var cardArray = [];
+// 	Object.keys(localStorage).forEach(function(key) {
+// 		cardArray.push(JSON.parse(localStorage.getItem(key)));
+// 	});
+// 	cardArray.forEach(function(card, i) {
+// 		if (i > n) {
+// 			console.log($(card.id));
+// 			card.hide()
+// 	}
+// 	});
+// };
 
 //constructor function 
 function Card(title, body) {
@@ -110,7 +66,7 @@ function retrieveCard() {
 	})
 };
 
-//enabling button on both fields keyup
+//enables button on both fields keyup
 function enabledBtn() {
     if ( $('.body-input').val() === "" && $('.title-input').val() === "") {
       $('.submit-button').attr("disabled", true)
@@ -125,11 +81,15 @@ function resetFields() {
 	$('.body-input').val("");
 };
 
-//add card when enter button pressed/////////////////////////////////////////NOT WORKING
+//counts characters in input field
+function updateCount() {
+    var cs = $(this).val().length;
+    $('.display-count').text(cs);
+};
+
+//add card when enter button pressed
 function enterPress(e) {
-	// console.log(e)
 	if (e.keyCode === 13 && ($('.title-input').val() && $('.body-input').val())){
-		// e.preventDefault();
 		addCard(e)
 	}
 };
@@ -189,15 +149,15 @@ function deleteCard() {
 
 //changes importance status
 function statusChange() {
-		var statusArray = ['none', 'low', 'normal', 'high', 'critical'];
-		var $checkStatus = $(this).closest('.rank').find('.rank-status');
-		var statusIndex = statusArray.indexOf($checkStatus.text());
-		var increment = $(this).hasClass('upvote-button-div') ? 1:-1;
-		var newStatus = statusArray[statusIndex + increment];
-		var updateCard = JSON.parse(localStorage.getItem(getId($(this))));
-		$checkStatus.text(newStatus);
-		updateCard.status = newStatus;
-		storeCard(updateCard)	
+	var statusArray = ['none', 'low', 'normal', 'high', 'critical'];
+	var $checkStatus = $(this).closest('.rank').find('.rank-status');
+	var statusIndex = statusArray.indexOf($checkStatus.text());
+	var increment = $(this).hasClass('upvote-button-div') ? 1:-1;
+	var newStatus = statusArray[statusIndex + increment];
+	var updateCard = JSON.parse(localStorage.getItem(getId($(this))));
+	$checkStatus.text(newStatus);
+	updateCard.status = newStatus;
+	storeCard(updateCard)	
 };
 
 //edit title text and save on enter/clickout
@@ -245,6 +205,7 @@ function doYouMatch(searchTerm, index) {
 	}
 };
 
+//functions for status filter
 function completeTask() {
 	var updateCard = JSON.parse(localStorage.getItem(getId($(this))));
 	updateCard.completed = !updateCard.completed;
@@ -252,12 +213,75 @@ function completeTask() {
 	storeCard(updateCard);
 };
 
+
 function showCompletedTasks() {
 	var foundCard = $('.card-list').find('.card-display-none');
 	if (foundCard) {
 		foundCard.removeClass('card-display-none');
 		$('.card-list').prepend(foundCard);
 	}
+};
+
+function showNone() {
+	var updateCard = [];
+	Object.keys(localStorage).forEach(function(key){
+		updateCard.push(JSON.parse(localStorage.getItem(key)))
+	})
+	var filteredCards = updateCard.filter(function(card){
+		return card.status === 'none'
+	})
+	showFiltered(filteredCards)
+};
+
+function showLow() {
+	var updateCard = [];
+	Object.keys(localStorage).forEach(function(key){
+		updateCard.push(JSON.parse(localStorage.getItem(key)))
+	})
+	var filteredCards = updateCard.filter(function(card){
+		return card.status === 'low'
+	})
+	showFiltered(filteredCards)
+};
+
+function showNormal() {
+	var updateCard = [];
+	Object.keys(localStorage).forEach(function(key){
+		updateCard.push(JSON.parse(localStorage.getItem(key)))
+	})
+	var filteredCards = updateCard.filter(function(card){
+		return card.status === 'normal'
+	})
+	showFiltered(filteredCards)
+};
+
+function showHigh() {
+	var updateCard = [];
+	Object.keys(localStorage).forEach(function(key){
+		updateCard.push(JSON.parse(localStorage.getItem(key)))
+	})
+	var filteredCards = updateCard.filter(function(card){
+		return card.status === 'high'
+	})
+	showFiltered(filteredCards)
+};
+
+function showCritical() {
+	var updateCard = [];
+	Object.keys(localStorage).forEach(function(key){
+		updateCard.push(JSON.parse(localStorage.getItem(key)))
+	})
+	var filteredCards = updateCard.filter(function(card){
+		return card.status === 'critical'
+	})
+	showFiltered(filteredCards)
+};
+
+function showFiltered(array) {
+	$('.card-list').empty();
+		array.forEach(function(card){
+	$('.card-list').append(prependCard(card));		
+		})
 };
 
 
